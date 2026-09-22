@@ -1,0 +1,9 @@
+{
+  "name": "campuslab-aws-operations",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-apigatewayv2": "3.1138.0",
+    "@aws-sdk/client-ec2": "3.1138.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "region": "us-east-1",
+  "instanceId": "i-0e59dc1bacbdc9483",
+  "instanceType": "t3.small",
+  "publicIp": "54.174.146.35",
+  "securityGroupId": "sg-020b6d351ed21687f",
+  "keyName": "campuslab-ea1",
+  "apiId": "pludtc2ix3",
+  "apiEndpoint": "https://pludtc2ix3.execute-api.us-east-1.amazonaws.com",
+  "authorizerId": "72ogo4",
+  "integrationId": "gvb7hkq"
+}

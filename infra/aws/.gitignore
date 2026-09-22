@@ -1,0 +1,5 @@
+.env
+*.pem
+app.jar
+*.tar.gz
+node_modules/

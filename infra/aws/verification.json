@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-09-22T19:47:22.786Z",
+  "health": {
+    "status": 200,
+    "body": "{\"groups\":[\"liveness\",\"readiness\"],\"status\":\"UP\"}"
+  },
+  "checks": [
+    {
+      "name": "sin token",
+      "status": 401,
+      "allowOrigin": null
+    },
+    {
+      "name": "token inválido",
+      "status": 401,
+      "allowOrigin": null
+    },
+    {
+      "name": "preflight Angular",
+      "status": 204,
+      "allowOrigin": "http://localhost:4200"
+    }
+  ],
+  "frontendBuild": "passed",
+  "frontendTargetedTests": {
+    "passed": 9,
+    "files": 3
+  },
+  "databaseObservation": {
+    "checkedAt": "2026-09-22T19:50:34.376Z",
+    "resourceName": "Prueba AWS",
+    "stockTotal": 19,
+    "stockDisponible": 19,
+    "activo": true,
+    "source": "PostgreSQL en EC2 consultado por SSH",
+    "note": "Registro creado durante la prueba del usuario; eliminación aún sin confirmación."
+  }
+}
