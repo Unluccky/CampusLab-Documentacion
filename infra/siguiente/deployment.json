@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-30T01:46:30.058Z",
+  "region": "us-east-1",
+  "instanceId": "i-0e59dc1bacbdc9483",
+  "publicIp": "3.80.190.243",
+  "rds": {
+    "id": "campuslab-postgres",
+    "state": "available",
+    "endpoint": "campuslab-postgres.cdxsfwsk2hzb.us-east-1.rds.amazonaws.com",
+    "public": false,
+    "encrypted": true
+  },
+  "apiEndpoint": "https://pludtc2ix3.execute-api.us-east-1.amazonaws.com"
+}

@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {"inspect": "node aws-config.mjs inspect", "configure": "node aws-config.mjs configure"},
+  "dependencies": {"@aws-sdk/client-ec2": "^3.0.0", "@aws-sdk/client-rds": "^3.0.0", "@aws-sdk/client-apigatewayv2": "^3.0.0"}
+}

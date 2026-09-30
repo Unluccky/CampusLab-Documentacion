@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-09-30T01:51:11.300Z",
+  "catalogMigration": {
+    "rows": 4,
+    "checksum": "03a0f4f6cf549e858e8e4f0eaf1310bb",
+    "matchesOriginal": true
+  },
+  "rdsConnections": [
+    {
+      "database": "bdcatalogo",
+      "tls": "TLSv1.3"
+    },
+    {
+      "database": "bdbookings",
+      "tls": "TLSv1.3"
+    },
+    {
+      "database": "bdusuarios",
+      "tls": "TLSv1.3"
+    }
+  ],
+  "profilesSurvivedEc2Restart": true,
+  "rdsPubliclyAccessible": false
+}

@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-30T01:50:43.273Z",
+  "checks": [
+    {
+      "check": "authenticated non-admin guard",
+      "passed": true
+    },
+    {
+      "check": "expired session guard",
+      "passed": true
+    },
+    {
+      "check": "login validation",
+      "passed": true
+    },
+    {
+      "check": "real Cognito admin login",
+      "passed": true
+    },
+    {
+      "check": "cloud profiles visible",
+      "passed": true
+    },
+    {
+      "check": "mobile layout",
+      "passed": true
+    }
+  ]
+}

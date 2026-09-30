@@ -1,0 +1,6 @@
+bundle/
+*.tar.gz
+*.dump
+*.env
+backups/
+node_modules/

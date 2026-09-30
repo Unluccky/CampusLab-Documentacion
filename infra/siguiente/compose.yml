@@ -1,0 +1,62 @@
+name: campuslab-next
+services:
+  catalog:
+    build: ./catalog
+    restart: unless-stopped
+    ports: ["8082:5000"]
+    environment:
+      PORT: 5000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${RDS_HOST}:5432/bdcatalogo?sslmode=verify-full&sslrootcert=/certs/global-bundle.pem
+      SPRING_DATASOURCE_USERNAME: campuslabapp
+      SPRING_DATASOURCE_PASSWORD: ${RDS_APP_PASSWORD:?Required}
+      CAMPUSLAB_ALLOWED_ORIGINS: http://localhost:4200,http://127.0.0.1:4200,http://localhost:4300,http://127.0.0.1:4300
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx192m
+      SPRING_JPA_SHOW_SQL: "false"
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+    volumes: ["./certs:/certs:ro"]
+    mem_limit: 448m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:5000/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 8
+  bookings:
+    build: ./bookings
+    restart: unless-stopped
+    ports: ["8083:5000"]
+    environment:
+      PORT: 5000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${RDS_HOST}:5432/bdbookings?sslmode=verify-full&sslrootcert=/certs/global-bundle.pem
+      SPRING_DATASOURCE_USERNAME: campuslabapp
+      SPRING_DATASOURCE_PASSWORD: ${RDS_APP_PASSWORD:?Required}
+      CAMPUSLAB_ALLOWED_ORIGINS: http://localhost:4200,http://127.0.0.1:4200,http://localhost:4300,http://127.0.0.1:4300
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx192m
+      SPRING_JPA_SHOW_SQL: "false"
+    volumes: ["./certs:/certs:ro"]
+    mem_limit: 448m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:5000/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 8
+  users:
+    build: ./users
+    restart: unless-stopped
+    ports: ["8084:5000"]
+    environment:
+      PORT: 5000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${RDS_HOST}:5432/bdusuarios?sslmode=verify-full&sslrootcert=/certs/global-bundle.pem
+      SPRING_DATASOURCE_USERNAME: campuslabapp
+      SPRING_DATASOURCE_PASSWORD: ${RDS_APP_PASSWORD:?Required}
+      CAMPUSLAB_ALLOWED_ORIGINS: http://localhost:4200,http://127.0.0.1:4200,http://localhost:4300,http://127.0.0.1:4300
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx192m
+    volumes: ["./certs:/certs:ro"]
+    mem_limit: 448m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:5000/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 8

@@ -1,0 +1,173 @@
+{
+  "date": "2026-09-29T15:02:03.144Z",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/api/usuarios",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/usuarios",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/usuarios",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/usuarios",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios/1",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/usuarios/1",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/usuarios/1",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/usuarios/1",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios/1",
+      "status": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/usuarios/1",
+      "status": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/usuarios",
+      "status": 409,
+      "expected": 409,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/usuarios",
+      "status": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalogo",
+      "status": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/reservas",
+      "status": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "check": "CORS",
+      "origin": "http://localhost:4200",
+      "status": 204,
+      "allowOrigin": "http://localhost:4200",
+      "passed": true
+    },
+    {
+      "check": "CORS",
+      "origin": "http://127.0.0.1:4300",
+      "status": 204,
+      "allowOrigin": "http://127.0.0.1:4300",
+      "passed": true
+    },
+    {
+      "check": "CORS",
+      "origin": "https://untrusted.example",
+      "status": 204,
+      "allowOrigin": null,
+      "passed": true
+    }
+  ]
+}
