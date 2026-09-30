@@ -4,7 +4,7 @@ Referencia: `RubricaExperiencia 1-JoseMuñoz-SebastianSantander.pdf`, página 2.
 
 ## Código que corresponde a esta versión
 
-Los cuatro repositorios originales tienen un worktree en `siguiente-experiencia/` y rama `feature/siguiente-experiencia`. El nuevo proyecto `siguiente-experiencia/campuslab_users` tiene Git local propio. No se ha creado un repositorio remoto para users ni publicado esta rama todavía. Los directorios originales conservan los cambios anteriores: no iniciar esa otra versión por accidente. La versión nueva se abre en **http://localhost:4200/login**; la revisión visual utiliza también 4300.
+Los cuatro repositorios originales tienen un worktree en `siguiente-experiencia/` y rama `feature/siguiente-experiencia`. Los cambios están publicados en GitHub en esa rama. El nuevo servicio se publica en [Unluccky/campuslab_users](https://github.com/Unluccky/campuslab_users), rama `main`, como repositorio privado. Los directorios originales conservan los cambios anteriores: no iniciar esa otra versión por accidente. La versión nueva se abre en **http://localhost:4200/login**; la revisión visual utiliza también 4300.
 
 ## Arquitectura desplegada
 
