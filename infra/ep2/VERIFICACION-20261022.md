@@ -9,7 +9,7 @@ rechazos HTTP. La prueba con la cuenta real del técnico está prevista para el
 
 Angular muestra el laboratorio como solo lectura, derivado del recurso elegido.
 Bookings consulta el catálogo al crear la reserva e ignora el laboratorio enviado
-por el cliente. Esta corrección de backend está pendiente de despliegue en AWS;
+por el cliente. Esta corrección de backend se desplegó en AWS el 22/10 (commit `5f37709`);
 publicar el código en GitHub no actualiza los contenedores en ejecución.
 
 Validación local de la corrección: Angular compila y sus 25 pruebas pasan;
@@ -65,3 +65,10 @@ Por ello **no se declara aprobada la prueba de sesión técnica real**. Al estar
 disponible, iniciar sesión con su cuenta académica, comprobar Técnico/Operador,
 aprobar y preparar una reserva, responder su ticket y verificar que Rabbit Admin
 no sea accesible. No compartir su contraseña.
+
+## Despliegue de la corrección del laboratorio
+
+Se instaló el JAR compilado localmente y se verificó su SHA-256: c404a33c7acf09555c877c4c92acd32b1241342aacdf63dce80583ed043fa793.
+SSM confirmó despliegue correcto y bookings, BFF y catálogo saludables.
+La compilación inicial en EC2 dejó SSM sin respuesta; se recuperó con un reinicio autorizado mediante parada y arranque. API Gateway se actualizó a 3.95.38.186.
+Se conservó el JAR y la imagen anteriores para restauración. La comprobación de salud no sustituye una nueva prueba autenticada de creación de reserva desde Angular.
