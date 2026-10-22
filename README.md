@@ -1,68 +1,64 @@
-# CampusLab — documentación EA1
+# CampusLab — Experiencia 2
 
-Plataforma académica de gestión de recursos de laboratorio. Caso semestral de **Iniciando Cloud Native I**, Duoc UC, profesora Viviana Poblete. Adaptación del caso Pedidos360 al dominio de laboratorios.
+Plataforma de reserva de laboratorios y equipos académicos. Java 21 / Spring Boot, Angular con MSAL, Microsoft Entra ID, API Gateway, EC2, PostgreSQL RDS y RabbitMQ.
 
-## Repositorios
+## Componentes
 
-| Componente | Repositorio |
+| Componente | Repositorio / ubicación |
 |---|---|
-| Frontend Angular | [frontend-campuslab](https://github.com/Unluccky/frontend-campuslab) |
-| BFF y login Cognito | [campuslab_bff](https://github.com/Unluccky/campuslab_bff) |
-| Catálogo | [CampusLab-Catalog](https://github.com/se-santander/CampusLab-Catalog) |
-| Reservas | [CampusLab-Bookings](https://github.com/se-santander/CampusLab-Bookings) |
+| Angular local, puerto 4200 | [frontend-campuslab](https://github.com/Unluccky/frontend-campuslab) |
+| BFF académico | [campuslab_bff](https://github.com/Unluccky/campuslab_bff) |
+| Catálogo y stock | [CampusLab-Catalog](https://github.com/se-santander/CampusLab-Catalog) |
+| Reservas, tickets, comprobantes y outbox | [CampusLab-Bookings](https://github.com/se-santander/CampusLab-Bookings) |
+| Consumidor de correo | [campuslab_notify](https://github.com/Unluccky/campuslab_notify) |
+| API de administración RabbitMQ | [campuslab_rabbit_admin](https://github.com/Unluccky/campuslab_rabbit_admin) |
 
-## Arquitectura demostrable
+Rama de los repositorios existentes: `feature/siguiente-experiencia`. Las versiones remotas pueden ir detrás de los cambios locales hasta completar la publicación.
+
+## Arquitectura actual
 
 ```mermaid
 flowchart LR
-    A[Angular local :4200] -->|Login| B[BFF local :8081]
-    B --> C[Amazon Cognito]
-    A -->|CRUD con Bearer JWT por HTTPS| G[API Gateway HTTP API]
-    G -->|HTTP :8082 con JWT| S[Catalog Docker en EC2]
-    S --> D[(PostgreSQL Docker)]
-    R[Bookings local :8083] --> L[(PostgreSQL bdbookings local)]
+    A[Angular local :4200] -->|Login académico MSAL| E[Microsoft Entra ID]
+    A -->|HTTPS y Bearer Azure| G[API Gateway]
+    G -->|HTTP y JWT validado en Spring| B[BFF en EC2]
+    B --> C[Catálogo y stock]
+    B --> R[Reservas y tickets]
+    C --> D[(PostgreSQL RDS)]
+    R --> D
+    R --> O[Outbox persistente]
+    O --> Q[RabbitMQ: dos nodos en EC2]
+    Q --> P[Preparación y comprobantes]
+    P --> D
+    Q --> N[Notify]
+    N --> M[Mailpit: buzón de pruebas]
+    B --> X[Rabbit Admin privado]
+    X --> Q
 ```
 
-El catálogo se ejecuta en EC2 con Docker Compose. La base PostgreSQL no publica 5432; sus datos se conservan en un volumen. API Gateway valida el token Cognito y Spring Security en catalog exige `ROLE_ADMIN`. BFF y Angular siguen locales. La conexión de API Gateway a EC2 usa HTTP; HTTPS está en la entrada pública de API Gateway.
+La profesora permite Angular local. Azure se usa para identidad; backend, mensajería y base de datos se ejecutan en AWS. La integración pública Gateway–EC2 usa HTTP; Spring vuelve a validar JWT. El panel RabbitMQ y Mailpit se enlazan solo a localhost de su instancia. Rabbit Admin recibe acceso privado desde la instancia de aplicaciones.
 
-## Documentos y operación
+## Flujo demostrado
 
-- [Requisitos y cuatro diagramas](docs/EA1-requisitos-y-diagramas.md).
-- [Despliegue, configuración y comandos de encendido/apagado](infra/aws/README.md).
-- [Compose de EC2](infra/aws/compose.yml).
-- [Identificadores del despliegue](infra/aws/deployment.json).
-- [Comprobaciones HTTP y observación de la base cloud](infra/aws/verification.json).
-- [Estado de los contenedores al verificar](infra/aws/containers.txt).
+Solicitud → aprobación → preparación → uso → devolución. La aprobación retiene una unidad de stock y devolución/cancelación la libera. Los comandos persistidos en outbox generan correos, tickets de preparación y comprobantes PDF mediante RabbitMQ. El técnico puede responder los tickets. Estudiantes consultan sus propias reservas; Admin/Operador gestionan el dominio. La administración RabbitMQ exige Admin.
 
-Salud del servicio: [API Gateway /actuator/health](https://pludtc2ix3.execute-api.us-east-1.amazonaws.com/actuator/health). La disponibilidad depende del estado de EC2 y del Learner Lab; las evidencias guardadas corresponden al momento de la comprobación, no a un monitor permanente.
+El 19/10/2026 se verificó desde Angular la reserva #6, stock 10→9→10, ticket y respuesta, descarga de ambos PDF y creación/consulta de recursos RabbitMQ. También se verificaron deduplicación de correo y envío de un mensaje inválido a DLQ en AWS. Son evidencias de esa fecha, no un monitor de disponibilidad.
 
-## Interfaz
+## Operación y evidencia
 
-Home y Admin tienen diseño adaptable a escritorio y celular. Las capturas de Admin usan **datos simulados para revisión visual**, no son evidencia de registros reales en AWS.
+- [Verificación de integración y límites](infra/ep2/VERIFICACION-20261019.md).
+- [Configuración de servicios EC2](infra/ep2/apps-compose.yml).
+- [Servicios de mensajería en EC2](infra/ep2/mq-services.yml).
+- [Clúster RabbitMQ](infra/mq/compose.yml).
+- [Actualizar IP del Gateway al iniciar AWS Academy](infra/ep2/refresh-gateway.ps1).
+- [Guía de demostración](docs/DEMOSTRACION-EP2.md).
+- [Matriz de rúbrica](docs/RUBRICA-EP2.md).
+- [Entrega anterior, registro histórico](docs/EA1-estado-historico.md).
 
-![Home en escritorio](docs/capturas/home-desktop.png)
+Las credenciales temporales AWS, contraseñas de BD/Rabbit/SMTP y cookies Erlang se inyectan por entorno o SSM. No se incluyen `.env`, claves privadas ni credenciales en Git. No terminar instancias ni borrar volúmenes para detener un laboratorio que debe conservar datos.
 
-![Admin en escritorio con datos de revisión visual](docs/capturas/admin-desktop.png)
+## Límites y pendientes visibles
 
-Versiones móviles: [Home](docs/capturas/home-mobile.png) · [Admin](docs/capturas/admin-mobile.png).
+Correo capturado en Mailpit; no se certifica entrega externa. Colas classic durables sin replicación de mensajes: dos nodos no equivalen a alta disponibilidad. La operación HTTP de stock es idempotente, pero una falla entre el commit de catálogo y el de reservas necesita reconciliación; no existe transacción distribuida.
 
-## Validación y pendientes
-
-- Login real Cognito probado por el usuario.
-- Catálogo: cinco pruebas backend aprobadas; pruebas HTTP con decodificación JWT simulada y PostgreSQL real.
-- Frontend: compilación y nueve pruebas específicas aprobadas; no se presenta la suite completa como validada.
-- AWS: dos contenedores saludables, health 200, rechazo de token ausente/inválido 401, preflight Angular 204.
-- Se observó el recurso `Prueba AWS` en PostgreSQL cloud. La eliminación cloud individual queda pendiente de confirmación.
-- Reservas conserva implementación local; no tiene autenticación JWT ni coordinación de stock con catalog todavía.
-- Dockerfiles de BFF y reservas disponibles; su ejecución en contenedores no fue verificada en esta sesión.
-- Presentación final por armar con los cuatro diagramas (máximo 10 minutos).
-- Reportería requiere aclarar su alcance en EA1, porque la pauta solo excluye explícitamente notificaciones y auditoría.
-- La invitación a la profesora y la participación individual del equipo deben acreditarse en GitHub. No se inventan autores, commits ni evidencias de participación.
-
-## Credenciales y presupuesto
-
-Las claves temporales de AWS Academy se obtienen en AWS Details y se proporcionan mediante variables de entorno. La contraseña de PostgreSQL también se entrega por entorno. Ninguna contraseña, clave privada SSH ni archivo `.env` forma parte de este repositorio.
-
-Para detener EC2 y conservar los datos, seguir la guía de operación. El volumen sigue teniendo costo mientras exista. No terminar la instancia ni borrar volúmenes si se necesita preservar la información.
-
-Actualización de validación: las pruebas de contexto de BFF y reservas también pasaron el 22/09/2026 (una por servicio). Reservas conectó con PostgreSQL local durante la prueba.
+Pendiente cerrar pruebas con cuentas de técnico/estudiante, eliminación de recursos desde Angular, publicación de todos los componentes y verificación de colaboradores docentes. No se atribuyen commits a otra persona ni se afirma participación que Git no demuestre. Kafka y reportería del caso semestral se mantienen como alcance posterior salvo indicación docente.

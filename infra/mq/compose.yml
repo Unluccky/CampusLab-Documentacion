@@ -1,0 +1,42 @@
+name: campuslab-mq
+x-rabbit: &rabbit
+  image: rabbitmq:4.1-management
+  restart: unless-stopped
+  environment: &environment
+    RABBITMQ_DEFAULT_USER: ${RABBIT_USER:?Configurar RABBIT_USER}
+    RABBITMQ_DEFAULT_PASS: ${RABBIT_PASSWORD:?Configurar RABBIT_PASSWORD}
+    RABBITMQ_DEFAULT_VHOST: campuslab
+    RABBITMQ_ERLANG_COOKIE: ${RABBIT_COOKIE:?Configurar RABBIT_COOKIE}
+    RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '+S 2:2'
+  healthcheck:
+    test: [CMD, rabbitmq-diagnostics, -q, check_running]
+    interval: 15s
+    timeout: 10s
+    retries: 12
+    start_period: 30s
+  mem_limit: 512m
+services:
+  rabbit1:
+    <<: *rabbit
+    hostname: rabbit1
+    environment:
+      <<: *environment
+      RABBITMQ_NODENAME: rabbit@rabbit1
+    ports:
+      - '${AMQP_BIND_IP:-127.0.0.1}:5672:5672'
+      - '127.0.0.1:15672:15672'
+    volumes:
+      - rabbit1-data:/var/lib/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+  rabbit2:
+    <<: *rabbit
+    hostname: rabbit2
+    environment:
+      <<: *environment
+      RABBITMQ_NODENAME: rabbit@rabbit2
+    volumes:
+      - rabbit2-data:/var/lib/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+volumes:
+  rabbit1-data:
+  rabbit2-data:

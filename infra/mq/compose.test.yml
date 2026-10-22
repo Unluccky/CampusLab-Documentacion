@@ -1,0 +1,38 @@
+services:
+  postgres-test:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: campuslab_messaging_test
+      POSTGRES_USER: campuslab_test
+      POSTGRES_PASSWORD: ${RABBIT_PASSWORD}
+    ports:
+      - '127.0.0.1:15432:5432'
+    tmpfs:
+      - /var/lib/postgresql
+    mem_limit: 256m
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:8025:8025'
+    mem_limit: 128m
+  notify:
+    build: ../../../campuslab_notify
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      RABBIT_HOST: rabbit1
+      RABBIT_USER: ${RABBIT_USER}
+      RABBIT_PASSWORD: ${RABBIT_PASSWORD}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_FROM: campuslab@example.test
+    volumes:
+      - notify-receipts:/data
+    depends_on:
+      rabbit1:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+volumes:
+  notify-receipts:
