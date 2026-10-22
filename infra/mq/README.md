@@ -30,4 +30,24 @@ docker compose exec rabbit1 rabbitmqctl list_queues -p campuslab name messages c
 Las colas clásicas son durables y tienen DLX, pero sus mensajes no se replican.
 Levantar el clúster y declarar las colas no demuestra todavía el consumidor Spring.
 
+## Comprobación real de las tres DLQ
+
+Con los consumidores activos, ejecutar en la EC2 de RabbitMQ:
+
+```bash
+sudo python3 verify-dlqs.py
+```
+
+El script obtiene las credenciales del contenedor `rabbit1` sin mostrarlas y usa
+la API de administración por loopback. Comprueba los dos nodos, los exchanges,
+los consumidores y la configuración DLX. Publica un evento JSON con tipo inválido
+por cada ruta de negocio y verifica su `eventId` y `x-death.reason=rejected` en
+la DLQ correspondiente. El tipo inválido provoca el rechazo antes de tocar la
+base de datos o SMTP. No purga ni elimina mensajes; las lecturas de evidencia
+usan `ack_requeue_true` y conservan los mensajes, aunque pueden cambiar su orden
+en la DLQ. Cada ejecución añade un mensaje de prueba por flujo.
+
+La ejecución cloud del 22/10/2026 está en
+[`../ep2/evidence/dlqs-20261022.json`](../ep2/evidence/dlqs-20261022.json).
+
 Referencia de configuración: https://www.rabbitmq.com/docs/cluster-formation

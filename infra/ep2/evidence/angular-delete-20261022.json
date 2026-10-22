@@ -1,0 +1,34 @@
+{
+  "environment": "AWS EC2 through Angular localhost:4200 -> API Gateway -> BFF -> Rabbit Admin",
+  "actions": "Create queue, exchange and binding in Angular; delete binding; delete empty queue; delete exchange",
+  "before": {
+    "checkedAt": "2026-10-22T06:42:29.896938+00:00",
+    "name": "lab.qa20261022delete",
+    "queueExists": true,
+    "messages": 0,
+    "exchangeExists": true,
+    "bindings": [
+      {
+        "source": "lab.qa20261022delete",
+        "destination": "lab.qa20261022delete",
+        "key": "demo.created"
+      }
+    ]
+  },
+  "afterBindingDeletion": {
+    "checkedAt": "2026-10-22T06:43:11.732023+00:00",
+    "name": "lab.qa20261022delete",
+    "queueExists": true,
+    "messages": 0,
+    "exchangeExists": true,
+    "bindings": []
+  },
+  "afterResourceDeletion": {
+    "checkedAt": "2026-10-22T06:44:00.709543+00:00",
+    "name": "lab.qa20261022delete",
+    "queueExists": false,
+    "messages": null,
+    "exchangeExists": false,
+    "bindings": []
+  }
+}

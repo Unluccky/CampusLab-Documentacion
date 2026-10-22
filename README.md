@@ -13,7 +13,7 @@ Plataforma de reserva de laboratorios y equipos académicos. Java 21 / Spring Bo
 | Consumidor de correo | [campuslab_notify](https://github.com/Unluccky/campuslab_notify) |
 | API de administración RabbitMQ | [campuslab_rabbit_admin](https://github.com/Unluccky/campuslab_rabbit_admin) |
 
-Rama de los repositorios existentes: `feature/siguiente-experiencia`. Las versiones remotas pueden ir detrás de los cambios locales hasta completar la publicación.
+La implementación está publicada en `main` de los siete repositorios, incluida esta documentación. La rama `feature/siguiente-experiencia` se conserva como referencia del desarrollo. Los nuevos registros de verificación pueden existir localmente antes de su siguiente publicación.
 
 ## Arquitectura actual
 
@@ -47,6 +47,7 @@ El 19/10/2026 se verificó desde Angular la reserva #6, stock 10→9→10, ticke
 ## Operación y evidencia
 
 - [Verificación de integración y límites](infra/ep2/VERIFICACION-20261019.md).
+- [Tres DLQ, eliminación desde Angular y configuración técnica: 22/10](infra/ep2/VERIFICACION-20261022.md).
 - [Configuración de servicios EC2](infra/ep2/apps-compose.yml).
 - [Servicios de mensajería en EC2](infra/ep2/mq-services.yml).
 - [Clúster RabbitMQ](infra/mq/compose.yml).
@@ -62,4 +63,4 @@ Las credenciales temporales AWS, contraseñas de BD/Rabbit/SMTP y cookies Erlang
 
 Correo capturado en Mailpit; no se certifica entrega externa. Colas classic durables sin replicación de mensajes: dos nodos no equivalen a alta disponibilidad. La operación HTTP de stock es idempotente, pero una falla entre el commit de catálogo y el de reservas necesita reconciliación; no existe transacción distribuida.
 
-Pendiente cerrar pruebas con cuentas de técnico/estudiante, eliminación de recursos desde Angular, publicación de todos los componentes y verificación de colaboradores docentes. No se atribuyen commits a otra persona ni se afirma participación que Git no demuestre. Kafka y reportería del caso semestral se mantienen como alcance posterior salvo indicación docente.
+Las tres DLQ y la eliminación de recursos desde Angular se verificaron en AWS el 22/10. La invitación técnica está aceptada y el rol configurado; falta probar su sesión real por disponibilidad del compañero. El usuario confirmó la prueba del estudiante el 22/10; falta verificar colaboradores docentes. No se atribuyen commits a otra persona ni se afirma participación que Git no demuestre. Kafka y reportería del caso semestral se mantienen como alcance posterior salvo indicación docente.

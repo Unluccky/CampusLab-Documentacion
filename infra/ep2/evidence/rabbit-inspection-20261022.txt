@@ -1,0 +1,140 @@
+=== Docker Compose services ===
+NAME                          IMAGE                       COMMAND                  SERVICE        CREATED      STATUS                   PORTS
+campuslab-mq-mailpit-1        axllent/mailpit:v1.27       "/mailpit"               mailpit        4 days ago   Up 9 minutes (healthy)   1025/tcp, 1110/tcp, 127.0.0.1:8025->8025/tcp
+campuslab-mq-notify-1         campuslab-mq-notify         "java -XX:MaxRAMPerc…"   notify         4 days ago   Up 9 minutes             
+campuslab-mq-rabbit-admin-1   campuslab-mq-rabbit-admin   "java -jar app.jar"      rabbit-admin   4 days ago   Up 9 minutes             172.31.19.190:8086->8086/tcp
+campuslab-mq-rabbit1-1        rabbitmq:4.1-management     "docker-entrypoint.s…"   rabbit1        4 days ago   Up 9 minutes (healthy)   4369/tcp, 5671/tcp, 15671/tcp, 15691-15692/tcp, 25672/tcp, 172.31.19.190:5672->5672/tcp, 127.0.0.1:15672->15672/tcp
+campuslab-mq-rabbit2-1        rabbitmq:4.1-management     "docker-entrypoint.s…"   rabbit2        4 days ago   Up 9 minutes (healthy)   4369/tcp, 5671-5672/tcp, 15671-15672/tcp, 15691-15692/tcp, 25672/tcp
+
+=== RabbitMQ cluster ===
+Cluster status of node rabbit@rabbit1 ...
+Basics
+
+Cluster name: campuslab
+Total CPU cores available cluster-wide: 4
+
+Cluster Tags
+
+(none)
+
+Disk Nodes
+
+rabbit@rabbit1
+rabbit@rabbit2
+
+Running Nodes
+
+rabbit@rabbit1
+rabbit@rabbit2
+
+Versions
+
+rabbit@rabbit1: RabbitMQ 4.1.8 on Erlang 27.3.4.19
+rabbit@rabbit2: RabbitMQ 4.1.8 on Erlang 27.3.4.19
+
+CPU Cores
+
+Node: rabbit@rabbit1, available CPU cores: 2
+Node: rabbit@rabbit2, available CPU cores: 2
+
+Maintenance status
+
+Node: rabbit@rabbit1, status: not under maintenance
+Node: rabbit@rabbit2, status: not under maintenance
+
+Alarms
+
+(none)
+
+Network Partitions
+
+(none)
+
+Listeners
+
+Node: rabbit@rabbit1, interface: [::], port: 15672, protocol: http, purpose: HTTP API
+Node: rabbit@rabbit1, interface: [::], port: 15692, protocol: http/prometheus, purpose: Prometheus exporter API over HTTP
+Node: rabbit@rabbit1, interface: [::], port: 25672, protocol: clustering, purpose: inter-node and CLI tool communication
+Node: rabbit@rabbit1, interface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
+Node: rabbit@rabbit2, interface: [::], port: 15672, protocol: http, purpose: HTTP API
+Node: rabbit@rabbit2, interface: [::], port: 15692, protocol: http/prometheus, purpose: Prometheus exporter API over HTTP
+Node: rabbit@rabbit2, interface: [::], port: 25672, protocol: clustering, purpose: inter-node and CLI tool communication
+Node: rabbit@rabbit2, interface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
+
+Feature flags
+
+Flag: classic_mirrored_queue_version, state: enabled
+Flag: classic_queue_type_delivery_support, state: enabled
+Flag: detailed_queues_endpoint, state: enabled
+Flag: direct_exchange_routing_v2, state: enabled
+Flag: drop_unroutable_metric, state: enabled
+Flag: empty_basic_get_metric, state: enabled
+Flag: feature_flags_v2, state: enabled
+Flag: implicit_default_bindings, state: enabled
+Flag: khepri_db, state: disabled
+Flag: listener_records_in_ets, state: enabled
+Flag: maintenance_mode_status, state: enabled
+Flag: message_containers, state: enabled
+Flag: message_containers_deaths_v2, state: enabled
+Flag: quorum_queue, state: enabled
+Flag: quorum_queue_non_voters, state: enabled
+Flag: rabbit_exchange_type_local_random, state: enabled
+Flag: rabbitmq_4.0.0, state: enabled
+Flag: rabbitmq_4.1.0, state: enabled
+Flag: restart_streams, state: enabled
+Flag: stream_filtering, state: enabled
+Flag: stream_queue, state: enabled
+Flag: stream_sac_coordinator_unblock_group, state: enabled
+Flag: stream_single_active_consumer, state: enabled
+Flag: stream_update_config_command, state: enabled
+Flag: tracking_records_in_ets, state: enabled
+Flag: user_limits, state: enabled
+Flag: virtual_host_metadata, state: enabled
+
+=== Business queues and DLQ ===
+Timeout: 60.0 seconds ...
+Listing queues for vhost campuslab ...
+name	messages_ready	messages_unacknowledged	consumers	arguments
+q.cmd.prep.dlq	2	0	0	[{"x-queue-type","classic"}]
+q.cmd.voucher.dlq	1	0	0	[{"x-queue-type","classic"}]
+q.cmd.email	0	0	1	[{"x-dead-letter-exchange","cmd.dead.dlx"},{"x-dead-letter-routing-key","q.cmd.email.dlq"},{"x-queue-type","classic"}]
+q.cmd.voucher	0	0	1	[{"x-dead-letter-exchange","cmd.dead.dlx"},{"x-dead-letter-routing-key","q.cmd.voucher.dlq"},{"x-queue-type","classic"}]
+q.cmd.email.dlq	3	0	0	[{"x-queue-type","classic"}]
+lab.qa20261019	0	0	0	[{"x-queue-type","classic"}]
+q.cmd.prep	0	0	1	[{"x-dead-letter-exchange","cmd.dead.dlx"},{"x-dead-letter-routing-key","q.cmd.prep.dlq"},{"x-queue-type","classic"}]
+
+=== Exchanges ===
+Listing exchanges for vhost campuslab ...
+name	type	durable
+cmd.dead.dlx	direct	true
+amq.direct	direct	true
+cmd.topic	topic	true
+amq.rabbitmq.trace	topic	true
+amq.fanout	fanout	true
+amq.topic	topic	true
+amq.headers	headers	true
+cmd.direct	direct	true
+amq.match	headers	true
+lab.qa20261019	direct	true
+	direct	true
+
+=== Bindings ===
+Listing bindings for vhost campuslab...
+source_name	destination_name	routing_key
+	q.cmd.prep.dlq	q.cmd.prep.dlq
+	q.cmd.voucher.dlq	q.cmd.voucher.dlq
+	q.cmd.email	q.cmd.email
+	q.cmd.voucher	q.cmd.voucher
+	q.cmd.email.dlq	q.cmd.email.dlq
+	lab.qa20261019	lab.qa20261019
+	q.cmd.prep	q.cmd.prep
+cmd.dead.dlx	q.cmd.email.dlq	q.cmd.email.dlq
+cmd.dead.dlx	q.cmd.prep.dlq	q.cmd.prep.dlq
+cmd.dead.dlx	q.cmd.voucher.dlq	q.cmd.voucher.dlq
+cmd.direct	q.cmd.email	email.send
+cmd.direct	q.cmd.prep	prep.ticket
+cmd.direct	q.cmd.voucher	voucher.gen
+cmd.topic	q.cmd.email	email.*
+cmd.topic	q.cmd.prep	prep.#
+cmd.topic	q.cmd.voucher	voucher.*
+lab.qa20261019	lab.qa20261019	demo.created

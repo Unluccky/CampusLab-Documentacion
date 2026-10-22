@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-10-22T06:41:13.129511+00:00",
+  "runId": "qa-dlq-20bf52f8-34f1-457a-acb8-6e060da7eb01",
+  "nodes": [
+    "rabbit@rabbit1",
+    "rabbit@rabbit2"
+  ],
+  "exchanges": {
+    "": "direct",
+    "amq.direct": "direct",
+    "amq.fanout": "fanout",
+    "amq.headers": "headers",
+    "amq.match": "headers",
+    "amq.rabbitmq.trace": "topic",
+    "amq.topic": "topic",
+    "cmd.dead.dlx": "direct",
+    "cmd.direct": "direct",
+    "cmd.topic": "topic",
+    "lab.qa20261019": "direct"
+  },
+  "dlqs": [
+    {
+      "queue": "q.cmd.email",
+      "dlq": "q.cmd.email.dlq",
+      "eventId": "7dfd4da2-36da-4f17-968c-5f8beef870e0",
+      "messagesBefore": 2,
+      "messagesAfter": 3,
+      "xDeath": [
+        {
+          "count": 1,
+          "exchange": "cmd.direct",
+          "queue": "q.cmd.email",
+          "reason": "rejected",
+          "routing-keys": [
+            "email.send"
+          ],
+          "time": 1792651257
+        }
+      ],
+      "verified": true
+    },
+    {
+      "queue": "q.cmd.prep",
+      "dlq": "q.cmd.prep.dlq",
+      "eventId": "67b1bc0a-1cba-4e67-ad06-2724ecef93bb",
+      "messagesBefore": 1,
+      "messagesAfter": 2,
+      "xDeath": [
+        {
+          "count": 1,
+          "exchange": "cmd.direct",
+          "queue": "q.cmd.prep",
+          "reason": "rejected",
+          "routing-keys": [
+            "prep.ticket"
+          ],
+          "time": 1792651263
+        }
+      ],
+      "verified": true
+    },
+    {
+      "queue": "q.cmd.voucher",
+      "dlq": "q.cmd.voucher.dlq",
+      "eventId": "befdc74e-93c7-429b-9f85-324f961f8431",
+      "messagesBefore": 0,
+      "messagesAfter": 1,
+      "xDeath": [
+        {
+          "count": 1,
+          "exchange": "cmd.direct",
+          "queue": "q.cmd.voucher",
+          "reason": "rejected",
+          "routing-keys": [
+            "voucher.gen"
+          ],
+          "time": 1792651268
+        }
+      ],
+      "verified": true
+    }
+  ],
+  "evidenceRetained": true,
+  "businessEffects": "none: invalid event types"
+}
