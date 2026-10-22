@@ -53,6 +53,7 @@ El 19/10/2026 se verificó desde Angular la reserva #6, stock 10→9→10, ticke
 - [Actualizar IP del Gateway al iniciar AWS Academy](infra/ep2/refresh-gateway.ps1).
 - [Guía de demostración](docs/DEMOSTRACION-EP2.md).
 - [Matriz de rúbrica](docs/RUBRICA-EP2.md).
+- [Comparación EP3, EP4 y proyecto](docs/COMPARACION-EP3-EP4.md).
 - [Entrega anterior, registro histórico](docs/EA1-estado-historico.md).
 
 Las credenciales temporales AWS, contraseñas de BD/Rabbit/SMTP y cookies Erlang se inyectan por entorno o SSM. No se incluyen `.env`, claves privadas ni credenciales en Git. No terminar instancias ni borrar volúmenes para detener un laboratorio que debe conservar datos.
