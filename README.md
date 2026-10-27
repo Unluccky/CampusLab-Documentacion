@@ -64,3 +64,8 @@ Las credenciales temporales AWS, contraseñas de BD/Rabbit/SMTP y cookies Erlang
 Correo capturado en Mailpit; no se certifica entrega externa. Colas classic durables sin replicación de mensajes: dos nodos no equivalen a alta disponibilidad. La operación HTTP de stock es idempotente, pero una falla entre el commit de catálogo y el de reservas necesita reconciliación; no existe transacción distribuida.
 
 Las tres DLQ y la eliminación de recursos desde Angular se verificaron en AWS el 22/10. La invitación técnica está aceptada y el rol configurado; falta probar su sesión real por disponibilidad del compañero. El usuario confirmó la prueba del estudiante el 22/10; falta verificar colaboradores docentes. No se atribuyen commits a otra persona ni se afirma participación que Git no demuestre. Kafka y reportería del caso semestral se mantienen como alcance posterior salvo indicación docente.
+
+## Material de entrega actualizado
+
+- [Presentación de CampusLab (10 diapositivas)](docs/presentaciones/CampusLab-Presentacion.pdf).
+- [Prueba con la cuenta real del técnico, 26/10/2026](infra/ep2/VERIFICACION-TECNICO-20261026.md).

@@ -16,7 +16,7 @@ Referencia: `EP3_DSY1107_Estudiante_encargo.pdf`, pauta recibida para esta etapa
 ## Requisitos transversales
 
 - Java/Spring y Angular: compilación y tests por componente; no confundir tests unitarios con integración real.
-- Azure académico: login real y JWT validado por Gateway y Spring. Invitación técnica aceptada y Object ID configurado en BFF, catálogo y bookings; sesión real del compañero pendiente por disponibilidad.
+- Azure académico: login real y JWT validado por Gateway y Spring. Invitación técnica aceptada y Object ID configurado en BFF, catálogo y bookings; sesión real del técnico comprobada el 26/10: aprobación, preparación, respuesta del ticket, uso y devolución de la reserva #12.
 - RDS: catálogo, reservas y usuarios en PostgreSQL cloud; conexión TLS de los servicios actualizados.
 - Mensajería: EC2 dedicada, dos nodos RabbitMQ. Colas classic sin replicación; no afirmar alta disponibilidad.
 - GitHub: preparar y publicar todos los componentes; verificar enlaces y colaboración docente. Los módulos notify/admin están publicados en repositorios privados de Unluccky; falta autorizar acceso docente.
@@ -24,10 +24,14 @@ Referencia: `EP3_DSY1107_Estudiante_encargo.pdf`, pauta recibida para esta etapa
 
 ## Pendientes que impiden cerrar la revisión
 
-Prueba real de técnico (prevista para el 23/10; estudiante probado según confirmación del usuario el 22/10), revisión final de entrega GitHub y colaboradores, y proveedor SMTP si se exige demostrar recepción externa. La coordinación de stock es idempotente pero requiere reconciliación ante un fallo entre los dos commits de dominio.
+La prueba real del técnico quedó completada el 26/10; el estudiante fue probado según confirmación del usuario el 22/10. Quedan la revisión del acceso docente y el proveedor SMTP si se exige demostrar recepción externa. La coordinación de stock es idempotente pero requiere reconciliación ante un fallo entre los dos commits de dominio.
 
 ## Actualización 22/10/2026
 
 BFF: cuatro pruebas nuevas sobre reenvío HTTP real hacia un servidor de prueba, incluidos DELETE con cuerpo, bloqueo de estudiante/emisor ajeno y protección de topología. Rabbit Admin: integración local real de creación/enrutamiento/eliminación y rechazo de eliminación de cola con mensajes, conservando el contenido. La verificación cloud posterior de las tres DLQ y de eliminación desde Angular está en [VERIFICACION-20261022.md](../infra/ep2/VERIFICACION-20261022.md).
 
 Pruebas del 22/10: bookings 14/14 con PostgreSQL y Rabbit reales; Rabbit Admin 9/9 (incluidas dos integraciones); BFF 7/7 (JWT y proxy); Notify 4/4; catálogo 5/5 (stock y JWT). Los tests no envían correo a personas reales.
+
+## Prueba técnica completada el 26/10
+
+Ver [evidencia de la sesión real y reserva #12](../infra/ep2/VERIFICACION-TECNICO-20261026.md).

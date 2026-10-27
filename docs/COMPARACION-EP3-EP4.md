@@ -1,8 +1,8 @@
 # Comparación de EP3, EP4 y CampusLab
 
-Revisión: 22/10/2026. Fuentes: `EP3_DSY1107_Estudiante_encargo.pdf` y `EP4_DSY1107_Estudiante_presentación.pdf`. Ambas pautas repiten los ocho indicadores técnicos. EP3 corresponde al encargo y EP4 a la presentación, con evaluación individual aunque la exposición sea grupal.
+Revisión: 26/10/2026. Fuentes: `EP3_DSY1107_Estudiante_encargo.pdf` y `EP4_DSY1107_Estudiante_presentación.pdf`. Ambas pautas repiten los ocho indicadores técnicos. EP3 corresponde al encargo y EP4 a la presentación, con evaluación individual aunque la exposición sea grupal.
 
-Esta comparación se basa en el código, pruebas locales y evidencia cloud del 19/10 y 22/10. No certifica disponibilidad permanente de AWS ni garantiza una nota.
+Esta comparación se basa en el código, pruebas locales y evidencia cloud del 19/10, 22/10 y 26/10. No certifica disponibilidad permanente de AWS ni garantiza una nota.
 
 ## Indicadores técnicos compartidos
 
@@ -23,11 +23,11 @@ Esta comparación se basa en el código, pruebas locales y evidencia cloud del 1
 |---|---|---|---|
 | Componentes completos, compilables y con pruebas básicas | EP3 | Implementados; 39 pruebas backend aprobadas en la revisión del 22/10 | Verificación final del entorno antes de entregar |
 | Base de datos cloud mediante entidades/repositorios/conexión | EP3 | PostgreSQL RDS integrado; flujo completo probado | Mostrar persistencia y configuración sin exponer secretos |
-| Login IDaaS y JWT frontend/backend | Ambas | Azure/MSAL y validación Gateway/Spring; login académico real probado | Estudiante probado según confirmación del usuario el 22/10; falta sesión real del técnico |
+| Login IDaaS y JWT frontend/backend | Ambas | Azure/MSAL y validación Gateway/Spring; login académico real probado | Estudiante probado según confirmación del usuario el 22/10; sesión técnica real comprobada el 26/10 |
 | Instancia de API Manager y configuración de endpoints | EP4 | AWS API Gateway configurado | Mostrar rutas e integraciones |
 | Frontend consume API Manager | EP4 | Ruta académica Angular → Gateway → BFF funcionando en evidencia del 19/10 | Repetir durante presentación |
 | JWT válido aceptado y peticiones inválidas rechazadas | EP4 | Implementado y probado | Preparar ambos ejemplos visibles |
-| Tenant y usuarios registrados | EP4 | Cuenta administradora operativa; invitación del compañero aceptada y Object ID configurado como Técnico/Operador en los tres servicios | Prueba de su sesión real pendiente por disponibilidad |
+| Tenant y usuarios registrados | EP4 | Cuenta administradora operativa; invitación del compañero aceptada y Object ID configurado como Técnico/Operador en los tres servicios | Sesión real probada el 26/10 con aprobación, preparación, respuesta y devolución |
 | Backend/frontend desplegados en cloud | EP4 | Backend en AWS, Angular local | La profesora aclaró expresamente que Angular puede correr local en esta entrega |
 | Dos nodos RabbitMQ en clúster | EP4 | Configurados y comprobados en AWS | Mostrar running_nodes y estado del clúster |
 | Tres colas con sus DLQ funcionando | EP4 | Seis colas configuradas; flujos normales y las tres rutas de rechazo verificadas en AWS | Mostrar evidencia del 22/10 o repetir script con servicios saludables |
@@ -50,3 +50,5 @@ La coordinación de stock usa HTTP idempotente entre dominios y necesita reconci
 - [Tres DLQ, eliminación y técnico: 22/10](../infra/ep2/VERIFICACION-20261022.md).
 - [Guía para defender cada criterio](GUIA-DEFENSA-RUBRICA.md).
 - [Arquitectura y repositorios](../README.md).
+
+- [Sesión técnica y reserva #12: 26/10](../infra/ep2/VERIFICACION-TECNICO-20261026.md).
