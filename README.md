@@ -1,71 +1,46 @@
-# CampusLab — Experiencia 2
+# CampusLab — Experiencias 2 y 3
 
-Plataforma de reserva de laboratorios y equipos académicos. Java 21 / Spring Boot, Angular con MSAL, Microsoft Entra ID, API Gateway, EC2, PostgreSQL RDS y RabbitMQ.
+Plataforma de reservas académicas desarrollada con Angular, microservicios Spring Boot, Microsoft Entra ID/Cognito, API Gateway, EC2, PostgreSQL RDS, RabbitMQ y Kafka. Esta documentación contiene arquitectura, infraestructura, operación y evidencias; las credenciales se inyectan por entorno o SSM y no se versionan.
 
-## Componentes
+## Repositorios del proyecto
 
-| Componente | Repositorio / ubicación |
+| Componente | Repositorio |
 |---|---|
-| Angular local, puerto 4200 | [frontend-campuslab](https://github.com/Unluccky/frontend-campuslab) |
-| BFF académico | [campuslab_bff](https://github.com/Unluccky/campuslab_bff) |
+| Frontend Angular | [frontend-campuslab](https://github.com/Unluccky/frontend-campuslab) |
+| BFF académico y autenticación | [campuslab_bff](https://github.com/Unluccky/campuslab_bff) |
 | Catálogo y stock | [CampusLab-Catalog](https://github.com/se-santander/CampusLab-Catalog) |
-| Reservas, tickets, comprobantes y outbox | [CampusLab-Bookings](https://github.com/se-santander/CampusLab-Bookings) |
+| Reservas, tickets, comprobantes y eventos | [CampusLab-Bookings](https://github.com/se-santander/CampusLab-Bookings) |
+| Reportería, consumidor Kafka y administración de topics | [campuslab_reportes](https://github.com/Unluccky/campuslab_reportes) |
 | Consumidor de correo | [campuslab_notify](https://github.com/Unluccky/campuslab_notify) |
-| API de administración RabbitMQ | [campuslab_rabbit_admin](https://github.com/Unluccky/campuslab_rabbit_admin) |
+| Administración RabbitMQ | [campuslab_rabbit_admin](https://github.com/Unluccky/campuslab_rabbit_admin) |
+| Arquitectura, Docker Compose y evidencia | [CampusLab-Documentacion](https://github.com/Unluccky/CampusLab-Documentacion) |
 
-La implementación está publicada en `main` de los siete repositorios, incluida esta documentación. La rama `feature/siguiente-experiencia` se conserva como referencia del desarrollo. Los nuevos registros de verificación pueden existir localmente antes de su siguiente publicación.
+## Arquitectura
 
-## Arquitectura actual
+### Experiencia 2: reservas y RabbitMQ
 
-```mermaid
-flowchart LR
-    A[Angular local :4200] -->|Login académico MSAL| E[Microsoft Entra ID]
-    A -->|HTTPS y Bearer Azure| G[API Gateway]
-    G -->|HTTP y JWT validado en Spring| B[BFF en EC2]
-    B --> C[Catálogo y stock]
-    B --> R[Reservas y tickets]
-    C --> D[(PostgreSQL RDS)]
-    R --> D
-    R --> O[Outbox persistente]
-    O --> Q[RabbitMQ: dos nodos en EC2]
-    Q --> P[Preparación y comprobantes]
-    P --> D
-    Q --> N[Notify]
-    N --> M[Mailpit: buzón de pruebas]
-    B --> X[Rabbit Admin privado]
-    X --> Q
-```
+Angular local se autentica con Microsoft Entra ID o el flujo Cognito existente. API Gateway enruta al BFF y a los servicios Spring. Bookings y Catálogo persisten en PostgreSQL/RDS. La aprobación retiene stock; Outbox y RabbitMQ desacoplan notificaciones, tickets de preparación y comprobantes PDF. Rabbit Admin limita la gestión manual de mensajería al rol Admin.
 
-La profesora permite Angular local. Azure se usa para identidad; backend, mensajería y base de datos se ejecutan en AWS. La integración pública Gateway–EC2 usa HTTP; Spring vuelve a validar JWT. El panel RabbitMQ y Mailpit se enlazan solo a localhost de su instancia. Rabbit Admin recibe acceso privado desde la instancia de aplicaciones.
+### Experiencia 3: Kafka y reportería
 
-## Flujo demostrado
+Bookings publica eventos de creación/cambio de estado en `campuslab.reservas.v1`. En EC2, Docker Compose levanta ZooKeeper, dos brokers Kafka, Kafka UI, Reportería, Prometheus y Grafana. Reportería consume los eventos y actualiza su proyección PostgreSQL; BFF expone KPI y administración de topics bajo autenticación académica. Angular incluye el dashboard Grafana en `/cuenta/reportes`.
 
-Solicitud → aprobación → preparación → uso → devolución. La aprobación retiene una unidad de stock y devolución/cancelación la libera. Los comandos persistidos en outbox generan correos, tickets de preparación y comprobantes PDF mediante RabbitMQ. El técnico puede responder los tickets. Estudiantes consultan sus propias reservas; Admin/Operador gestionan el dominio. La administración RabbitMQ exige Admin.
+## Infraestructura y operación
 
-El 19/10/2026 se verificó desde Angular la reserva #6, stock 10→9→10, ticket y respuesta, descarga de ambos PDF y creación/consulta de recursos RabbitMQ. También se verificaron deduplicación de correo y envío de un mensaje inválido a DLQ en AWS. Son evidencias de esa fecha, no un monitor de disponibilidad.
+- [EP2: servicios de aplicación y Gateway](infra/ep2/README.md) y [mensajería RabbitMQ](infra/mq/README.md).
+- [EP3: Kafka, Reportería, Prometheus y Grafana](infra/ep3/README.md).
+- [Actualizar integraciones de API Gateway al iniciar AWS Academy](infra/ep2/refresh-gateway.ps1).
+- [Guía de demostración](docs/DEMOSTRACION-EP2.md) y [guía de defensa](docs/GUIA-DEFENSA-RUBRICA.md).
+- [Matriz EP2](docs/RUBRICA-EP2.md); los requisitos de EP3/EP4 se contrastan con la pauta entregada para cada experiencia.
 
-## Operación y evidencia
+## Seguridad y operación del laboratorio
 
-- [Verificación de integración y límites](infra/ep2/VERIFICACION-20261019.md).
-- [Tres DLQ, eliminación desde Angular y configuración técnica: 22/10](infra/ep2/VERIFICACION-20261022.md).
-- [Configuración de servicios EC2](infra/ep2/apps-compose.yml).
-- [Servicios de mensajería en EC2](infra/ep2/mq-services.yml).
-- [Clúster RabbitMQ](infra/mq/compose.yml).
-- [Actualizar IP del Gateway al iniciar AWS Academy](infra/ep2/refresh-gateway.ps1).
-- [Guía de demostración](docs/DEMOSTRACION-EP2.md).
-- [Matriz de rúbrica](docs/RUBRICA-EP2.md).
-- [Comparación EP3, EP4 y proyecto](docs/COMPARACION-EP3-EP4.md).
-- [Entrega anterior, registro histórico](docs/EA1-estado-historico.md).
+- No guardar `.env`, contraseñas, tokens AWS, secretos OAuth ni claves privadas en Git.
+- Angular puede ejecutarse localmente en `http://localhost:4200`; API Gateway y servicios dependen de AWS Academy y del estado de las EC2.
+- Al reiniciar una EC2, su IP pública puede cambiar; actualizar las integraciones Gateway antes de probar.
+- Grafana y Kafka UI se acceden mediante túneles SSM; sus puertos no se publican en grupos de seguridad.
+- Dos brokers Kafka o nodos RabbitMQ no implican automáticamente replicación o alta disponibilidad de cada dato/cola.
 
-Las credenciales temporales AWS, contraseñas de BD/Rabbit/SMTP y cookies Erlang se inyectan por entorno o SSM. No se incluyen `.env`, claves privadas ni credenciales en Git. No terminar instancias ni borrar volúmenes para detener un laboratorio que debe conservar datos.
+## Validación y evidencia
 
-## Límites y pendientes visibles
-
-Correo capturado en Mailpit; no se certifica entrega externa. Colas classic durables sin replicación de mensajes: dos nodos no equivalen a alta disponibilidad. La operación HTTP de stock es idempotente, pero una falla entre el commit de catálogo y el de reservas necesita reconciliación; no existe transacción distribuida.
-
-Las tres DLQ y la eliminación de recursos desde Angular se verificaron en AWS el 22/10. La invitación técnica está aceptada y el rol configurado; falta probar su sesión real por disponibilidad del compañero. El usuario confirmó la prueba del estudiante el 22/10; falta verificar colaboradores docentes. No se atribuyen commits a otra persona ni se afirma participación que Git no demuestre. Kafka y reportería del caso semestral se mantienen como alcance posterior salvo indicación docente.
-
-## Material de entrega actualizado
-
-- [Presentación de CampusLab (10 diapositivas)](docs/presentaciones/CampusLab-Presentacion.pdf).
-- [Prueba con la cuenta real del técnico, 26/10/2026](infra/ep2/VERIFICACION-TECNICO-20261026.md).
+Las guías de infraestructura documentan los comandos, las variables requeridas y las pruebas que corresponden a cada experiencia. Las evidencias registran una ejecución en una fecha específica y no garantizan disponibilidad permanente. Antes de una exposición, iniciar AWS Academy y repetir el flujo visible de autenticación, reserva, mensajería y reportería.

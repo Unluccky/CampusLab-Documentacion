@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: CampusLab
+    orgId: 1
+    folder: CampusLab
+    type: file
+    disableDeletion: true
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

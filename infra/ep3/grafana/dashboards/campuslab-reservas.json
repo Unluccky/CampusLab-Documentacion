@@ -1,0 +1,110 @@
+{
+  "uid": "campuslab-reservas",
+  "title": "CampusLab | Reservas y flujo Kafka",
+  "description": "Vista operativa en tiempo real de reservas, eventos Kafka y salud de los servicios.",
+  "tags": ["campuslab", "experiencia-3", "kafka"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 6,
+  "editable": true,
+  "style": "dark",
+  "refresh": "15s",
+  "time": { "from": "now-6h", "to": "now" },
+  "annotations": { "list": [] },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Eventos publicados",
+      "description": "Reservas enviadas correctamente a Kafka en el período seleccionado.",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "sum(increase(campuslab_reservations_events_published_total[$__range])) or vector(0)", "legendFormat": "Publicados", "refId": "A" }],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0, "color": { "mode": "fixed", "fixedColor": "#2dd4bf" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "value_and_name", "colorMode": "value", "graphMode": "area", "justifyMode": "center" }
+    },
+    {
+      "id": 2,
+      "title": "Eventos procesados",
+      "description": "Eventos que Reportería consumió durante el período seleccionado.",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "sum(increase(campuslab_reportes_events_processed_total[$__range])) or vector(0)", "legendFormat": "Procesados", "refId": "A" }],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0, "color": { "mode": "fixed", "fixedColor": "#a78bfa" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "value_and_name", "colorMode": "value", "graphMode": "area", "justifyMode": "center" }
+    },
+    {
+      "id": 3,
+      "title": "Reservas registradas",
+      "description": "Cantidad actual de reservas en la proyección de Reportería.",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "sum(campuslab_reportes_reservations)", "legendFormat": "Reservas", "refId": "A" }],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0, "color": { "mode": "fixed", "fixedColor": "#fbbf24" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "value_and_name", "colorMode": "value", "graphMode": "area", "justifyMode": "center" }
+    },
+    {
+      "id": 4,
+      "title": "Estado de Reportería",
+      "description": "Estado del scrape de Prometheus: 1 significa disponible.",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "max(up{job=\"campuslab-reportes\"}) or vector(0)", "legendFormat": "Reportería", "refId": "A" }],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "bool_on_off", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }, "mappings": [{ "type": "value", "options": { "0": { "text": "Sin conexión", "color": "red" }, "1": { "text": "Operativa", "color": "green" } } }] }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "value_and_name", "colorMode": "value", "graphMode": "area", "justifyMode": "center" }
+    },
+    {
+      "id": 5,
+      "title": "Actividad de eventos",
+      "description": "Publicación frente a consumo por minuto.",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 0, "y": 4, "w": 16, "h": 9 },
+      "targets": [
+        { "expr": "sum(rate(campuslab_reservations_events_published_total[$__rate_interval]))", "legendFormat": "Publicados", "refId": "A" },
+        { "expr": "sum(rate(campuslab_reportes_events_processed_total[$__rate_interval]))", "legendFormat": "Procesados", "refId": "B" }
+      ],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "ops", "min": 0, "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 3, "fillOpacity": 8, "showPoints": "never", "spanNulls": false } }, "overrides": [
+        { "matcher": { "id": "byName", "options": "Publicados" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#2dd4bf" } }] },
+        { "matcher": { "id": "byName", "options": "Procesados" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "#a78bfa" } }] }
+      ] },
+      "options": { "legend": { "showLegend": true, "displayMode": "list", "placement": "bottom", "calcs": ["lastNotNull", "max"] }, "tooltip": { "mode": "multi", "sort": "desc" } }
+    },
+    {
+      "id": 6,
+      "title": "Salud de servicios",
+      "description": "Disponibilidad medida por Prometheus para Bookings y Reportería.",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 16, "y": 4, "w": 8, "h": 9 },
+      "targets": [
+        { "expr": "max(up{job=\"campuslab-bookings\"})", "legendFormat": "Bookings", "instant": true, "refId": "A" },
+        { "expr": "max(up{job=\"campuslab-reportes\"})", "legendFormat": "Reportería", "instant": true, "refId": "B" }
+      ],
+      "transparent": false,
+      "fieldConfig": { "defaults": { "unit": "bool_on_off", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }, "mappings": [{ "type": "value", "options": { "0": { "text": "Sin conexión", "color": "red" }, "1": { "text": "Operativo", "color": "green" } } }] }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "vertical", "textMode": "value_and_name", "colorMode": "value", "graphMode": "none", "justifyMode": "center", "wideLayout": true }
+    },
+    {
+      "id": 7,
+      "title": "Recorrido del evento",
+      "description": "Confirmación de extremo a extremo.",
+      "type": "text",
+      "datasource": { "type": "prometheus", "uid": "campuslab-prometheus" },
+      "gridPos": { "x": 0, "y": 13, "w": 24, "h": 5 },
+      "transparent": false,
+      "options": {
+        "mode": "markdown",
+        "content": "| **01 · ORIGEN** | **02 · MENSAJERÍA** | **03 · DESTINO** |\n|:--|:--|:--|\n| **Bookings** publica la reserva | **Kafka** · `campuslab.reservas.v1` | **Reportería** actualiza la proyección |"
+      }
+    }
+  ]
+}
